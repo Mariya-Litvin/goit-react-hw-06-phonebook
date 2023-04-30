@@ -1,4 +1,3 @@
-// import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { setFilter } from 'redux/filterSlice';
 import { getFilterContacts } from 'redux/selectors';
@@ -27,8 +26,3 @@ export const Filter = () => {
     </WrapperFilter>
   );
 };
-
-// Filter.propTypes = {
-//   onFindName: PropTypes.func.isRequired,
-//   valueFilter: PropTypes.string.isRequired,
-// };

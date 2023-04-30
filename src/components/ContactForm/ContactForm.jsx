@@ -1,10 +1,15 @@
-import PropTypes from 'prop-types';
+import { nanoid } from '@reduxjs/toolkit';
 import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { addContacts } from 'redux/contactsSlice';
+import { getContacts } from 'redux/selectors';
 import { ButtonForm, Form, InputForm, LabelForm } from './ContactForm.styled';
 
-export const ContactForm = ({ onClickSubmit }) => {
+export const ContactForm = () => {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
+  const contacts = useSelector(getContacts);
+  const dispatch = useDispatch();
 
   // При вводі у два поля інпуту( name, number) змінюємо значення у state
 
@@ -14,9 +19,27 @@ export const ContactForm = ({ onClickSubmit }) => {
     else if (name === 'number') setNumber(value);
   };
 
+  const addNewContact = () => {
+    let newContact = {
+      number,
+      name,
+      id: nanoid(),
+    };
+
+    const newContactName = contacts.find(
+      contact => contact.name.toLowerCase() === newContact.name.toLowerCase()
+    );
+
+    if (newContactName) {
+      return alert(`${newContact.name} is already in contacts.`);
+    } else {
+      dispatch(addContacts(newContact));
+    }
+  };
+
   const onFormSubmit = e => {
     e.preventDefault();
-    onClickSubmit(name, number);
+    addNewContact();
     setName('');
     setNumber('');
   };
@@ -52,8 +75,4 @@ export const ContactForm = ({ onClickSubmit }) => {
       <ButtonForm type="submit">Add contact</ButtonForm>
     </Form>
   );
-};
-
-ContactForm.propTypes = {
-  onClickSubmit: PropTypes.func.isRequired,
 };
